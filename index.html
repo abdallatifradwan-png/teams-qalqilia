@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مديرية التربية والتعليم قلقيلية - ملخص حضور حصص التيمز</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Cairo', 'sans-serif'] },
+                    colors: {
+                        primary: '#1e3a8a',
+                        secondary: '#3b82f6',
+                        accent: '#f59e0b',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-color: #f0fdfa;
+            background-image: radial-gradient(#cbd5e1 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+        .fade-in { animation: fadeIn 0.5s ease-in-out forwards; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .card-hover { transition: all 0.3s ease; }
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body class="min-h-screen text-gray-800 py-10 px-4">
+
+    <div class="max-w-6xl mx-auto">
+        <!-- Header -->
+        <header class="text-center mb-12 fade-in">
+            <img src="https://www.moj.pna.ps/assets/logo.png" alt="شعار" class="h-28 mx-auto mb-4 drop-shadow-sm">
+            <h2 class="text-2xl font-bold text-gray-700 mb-2">مديرية التربية والتعليم - قلقيلية</h2>
+            <h1 class="text-4xl font-extrabold text-primary mb-2">لوحة متابعة حصص التيمز</h1>
+            <p class="text-gray-600">نظام عرض بيانات الحضور والمتابعة الرقمية</p>
+        </header>
+
+        <!-- Selection Panel -->
+        <div class="bg-white rounded-2xl shadow-md p-6 mb-10 border border-gray-100 fade-in">
+            <div class="max-w-md mx-auto">
+                <label for="schoolSelect" class="block text-sm font-bold text-gray-700 mb-2 text-center">
+                    <i class="fa-solid fa-magnifying-glass text-secondary ml-2"></i> اختر المدرسة لعرض التقرير:
+                </label>
+                <div class="relative">
+                    <select id="schoolSelect" class="block w-full px-4 py-3 text-base border-gray-300 bg-gray-50 focus:ring-2 focus:ring-secondary rounded-xl appearance-none border">
+                        <option value="" disabled selected>-- قائمة المدارس --</option>
+                    </select>
+                    <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center px-4 text-gray-500">
+                        <i class="fa-solid fa-chevron-down text-sm"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dashboard Area -->
+        <div id="resultsArea" class="hidden">
+            <div class="bg-gradient-to-r from-primary to-secondary rounded-2xl shadow-lg p-6 mb-8 text-white flex flex-col md:flex-row items-center justify-between card-hover fade-in">
+                <div class="flex items-center mb-4 md:mb-0">
+                    <div class="bg-white p-3 rounded-full text-primary shadow-inner ml-4">
+                        <i class="fa-solid fa-user-tie text-3xl"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-sm text-blue-100 font-semibold mb-1">المشرف التربوي المسؤول</h2>
+                        <p id="supervisorName" class="text-2xl font-bold font-sans">اسم المشرف</p>
+                    </div>
+                </div>
+                <div class="bg-white/20 px-4 py-2 rounded-lg backdrop-blur-sm border border-white/30 text-center">
+                    <span class="text-sm block opacity-80">المدرسة المحددة</span>
+                    <span id="displaySchoolName" class="font-bold text-xl">اسم المدرسة</span>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Data Items -->
+                <div class="bg-white rounded-xl shadow-sm p-6 card-hover border border-gray-100">
+                    <div class="flex items-center mb-4 text-secondary"><i class="fa-regular fa-clock ml-3 text-xl"></i><h3 class="font-bold">التوقيت والزمن</h3></div>
+                    <div class="space-y-3 text-sm">
+                        <div class="flex justify-between border-b pb-1"><span>زمن الحصة:</span> <span id="valDuration" class="font-bold">-</span></div>
+                        <div class="flex justify-between"><span>بداية الحصة الأولى:</span> <span id="valStartTime" class="font-bold">-</span></div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-sm p-6 card-hover border border-gray-100">
+                    <div class="flex items-center mb-4 text-emerald-600"><i class="fa-solid fa-check-double ml-3 text-xl"></i><h3 class="font-bold">الالتزام المدرسي</h3></div>
+                    <div class="space-y-3 text-sm">
+                        <div class="flex justify-between border-b pb-1"><span>عدد الحصص:</span> <span id="valTotalClasses" class="font-bold">-</span></div>
+                        <div class="flex justify-between border-b pb-1"><span>التزام المعلمين:</span> <span id="valCommitment" class="font-bold">-</span></div>
+                        <div class="flex justify-between"><span>غير الملتزمين:</span> <span id="valUncommitted" class="font-bold">-</span></div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-sm p-6 card-hover border border-gray-100">
+                    <div class="flex items-center mb-4 text-accent"><i class="fa-solid fa-users-viewfinder ml-3 text-xl"></i><h3 class="font-bold">الطلبة والدمج</h3></div>
+                    <div class="space-y-3 text-sm">
+                        <div class="flex justify-between border-b pb-1"><span>نسبة الحضور:</span> <span id="valAttendance" class="font-bold">-</span></div>
+                        <div class="flex justify-between border-b pb-1"><span>حسابات الطلبة:</span> <span id="valAccounts" class="font-bold">-</span></div>
+                        <div class="flex justify-between"><span>دمج الصفوف:</span> <span id="valMerged" class="font-bold">-</span></div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-sm p-6 md:col-span-2 lg:col-span-3 border border-gray-100">
+                    <div class="flex items-center mb-4 text-purple-700 border-b pb-2"><i class="fa-solid fa-comment-dots ml-3 text-xl"></i><h3 class="font-bold">ملاحظات المتابعة وحضور المشرف</h3></div>
+                    <div class="grid md:grid-cols-2 gap-4 mt-2">
+                        <div class="p-4 bg-purple-50 rounded-lg">
+                            <span class="block text-xs text-purple-600 font-bold mb-1">الحصص التي تم حضورها:</span>
+                            <p id="valSupervisorAttended" class="text-sm font-semibold">-</p>
+                        </div>
+                        <div class="p-4 bg-blue-50 rounded-lg">
+                            <span class="block text-xs text-blue-600 font-bold mb-1">استجابة الإدارة والملاحظات العامة:</span>
+                            <p id="valNotes" class="text-sm font-semibold">-</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="emptyState" class="text-center py-20 fade-in">
+            <i class="fa-solid fa-school-circle-check text-6xl text-gray-300 mb-4"></i>
+            <h3 class="text-xl font-bold text-gray-400">يرجى اختيار المدرسة لعرض تقرير المتابعة الرقمي</h3>
+        </div>
+    </div>
+
+    <script>
+        // Data accurately transferred from the provided CSV file
+        const teamsData = [
+            { supervisor: "احمد جالودي", school: "فاطمة سرور", duration: "35", startTime: "9", totalClasses: "5", commitment: "جميعهم", uncommitted: "0", attendance: "72", merged: "لا", accountsReady: "غير محدد", notes: "لا يوجد ملاحظات", attendedClasses: "غير محدد" },
+            { supervisor: "احمد جالودي", school: "فاطمة غزال", duration: "35", startTime: "10", totalClasses: "5", commitment: "جميعهم", uncommitted: "0", attendance: "61", merged: "لا", accountsReady: "جاهزه", notes: "السبب في بدأ الحصة على الساعه العاشره لاعطاء فرصة للمرحلة الاساسيه من اول لرابع حيث تبدأ حصصهم على الساعه الثامنه حسب ما قالت المديرة", attendedClasses: "غير محدد" },
+            { supervisor: "احمد جالودي", school: "الرماضين", duration: "35", startTime: "9", totalClasses: "4", commitment: "جميعهم", uncommitted: "0", attendance: "50", merged: "لا", accountsReady: "عدد قليل لعدم وجود اجهزة حسب قول المديرة", notes: "متابعة مستمرة", attendedClasses: "غير محدد" },
+            { supervisor: "احمد هلال", school: "السلام الثانوية", duration: "٠", startTime: "٠", totalClasses: "٠", commitment: "٠", uncommitted: "٠", attendance: "٠", merged: "٠", accountsReady: "٠", notes: "لم يكن متوفرا الاتصال به", attendedClasses: "٠" },
+            { supervisor: "احمد هلال", school: "مسقط الثانوية", duration: "٣٥", startTime: "١١", totalClasses: "5", commitment: "جيد", uncommitted: "امجد حجار", attendance: "قليلة", merged: "نعم", accountsReady: "تم التواصل مع المدير ولم يجب", notes: "لم يتم حضور اية حصة ولكن تم الدخول إلى كافة الصفوف ولوحظ ان هناك خلل في روابط الفرق الخاصة بالصفوف ٥ و٧", attendedClasses: "لم يتم حضور أي حصة" },
+            { supervisor: "هناء داود", school: "العوده س م", duration: "٣٥ دقيقه", startTime: "الاساسية ٩ / العليا ١١", totalClasses: "٤٦ حصة", commitment: "تم التزام جميع الحصص", uncommitted: "لا يوجد", attendance: "٦٧٪؜", merged: "تم الدمج من الصف ١-٤ اساسي", accountsReady: "جاهز", notes: "تم التواصل عن طريق مجموعة الوتس. متوسط عدد الطلاب اقل من ٤٠ داخل الحصة", attendedClasses: "٢٥ حصة" },
+            { supervisor: "وفاء طويل", school: "الفندق س م", duration: "35", startTime: "للمرحلة 9 و للكبار 11", totalClasses: "48", commitment: "كامل 100%", uncommitted: "لا يوجد", attendance: "40-50%", merged: "لا", accountsReady: "نعم", notes: "كان هناك استجابة عالية وتعاون ومتابعة من المدير لجميع التعليمات", attendedClasses: "حوالي 24 حصة لكل صف حصتين" },
+            { supervisor: "وفاء طويل", school: "ب جيت ث", duration: "35 د", startTime: "9 للمرحلة 1-4 و 11 للكبار 5-12", totalClasses: "52 حصة + حصتين مصادر", commitment: "كامل 100%", uncommitted: "لا يوجد", attendance: "الكلي 61.2%", merged: "لا", accountsReady: "نعم", notes: "استجابة كاملة والتزام كامل لكل التعليمات وتعاون", attendedClasses: "حوالي 25 -30 حصتين او اكثر لكل صف" },
+            { supervisor: "وفاء طويل", school: "النبي الياس ث م", duration: "30-35", startTime: "9 صباها للمرحلة 1-4 و 11 للمرحلة 5-12", totalClasses: "46", commitment: "كامل 100%", uncommitted: "لا يوجد", attendance: "65-70%", merged: "لا يوجد", accountsReady: "جاهزة", notes: "استجابة وتعاون كامل ومتابعة تامة لكل التعليمات", attendedClasses: "25 حصة" }
+        ];
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const select = document.getElementById('schoolSelect');
+            const results = document.getElementById('resultsArea');
+            const empty = document.getElementById('emptyState');
+
+            teamsData.forEach((item, index) => {
+                const opt = document.createElement('option');
+                opt.value = index;
+                opt.textContent = item.school;
+                select.appendChild(opt);
+            });
+
+            select.addEventListener('change', function() {
+                const data = teamsData[this.value];
+                document.getElementById('supervisorName').textContent = data.supervisor;
+                document.getElementById('displaySchoolName').textContent = data.school;
+                document.getElementById('valDuration').textContent = data.duration;
+                document.getElementById('valStartTime').textContent = data.startTime;
+                document.getElementById('valTotalClasses').textContent = data.totalClasses;
+                document.getElementById('valCommitment').textContent = data.commitment;
+                document.getElementById('valUncommitted').textContent = data.uncommitted;
+                document.getElementById('valAttendance').textContent = data.attendance;
+                document.getElementById('valAccounts').textContent = data.accountsReady;
+                document.getElementById('valMerged').textContent = data.merged;
+                document.getElementById('valSupervisorAttended').textContent = data.attendedClasses;
+                document.getElementById('valNotes').textContent = data.notes;
+
+                empty.classList.add('hidden');
+                results.classList.remove('hidden');
+                results.classList.remove('fade-in');
+                void results.offsetWidth;
+                results.classList.add('fade-in');
+            });
+        });
+    </script>
+</body>
+</html>
